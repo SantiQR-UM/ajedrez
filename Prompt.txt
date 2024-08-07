@@ -1,0 +1,68 @@
+Primero, decirte que modifique un poco la idea que me diste, quiero que uses esto como base:
+
+# Piezas blancas
+T = u"\u2656"  # Torre ♖
+C = u"\u2658"  # Caballo ♘
+A = u"\u2657"  # Alfil ♗
+D = u"\u2655"  # Dama ♕
+R = u"\u2654"  # Rey ♔
+P = u"\u2659"  # Peón ♙
+
+# Piezas negras
+t = u"\u265C"  # Torre ♜ 
+c = u"\u265E"  # Caballo ♞
+a = u"\u265D"  # Alfil ♝
+d = u"\u265B"  # Dama ♛
+r = u"\u265A"  # Rey ♚
+p = u"\u265F"  # Peón ♟
+
+# Espacios
+B = u"\u25A1"  # Espacio blanco □
+N = u"\u25A0"  # Espacio negro ■
+
+def main():
+    # Tablero con variables de unicode
+    tablero = [
+        [t, c, a, d, r, a, c, t],
+        [p, p, p, p, p, p, p, p],
+        [B, N, B, N, B, N, B, N],
+        [N, B, N, B, N, B, N, B],
+        [B, N, B, N, B, N, B, N],
+        [N, B, N, B, N, B, N, B],
+        [P, P, P, P, P, P, P, P],
+        [T, C, A, D, R, A, C, T]
+    ]
+    
+    for fila in tablero:
+        for pieza in fila:
+            print(pieza, end=' ')
+        print()  # Salto de línea
+
+if __name__ == "__main__":
+    main()
+
+
+Ahora, avancemos un poco usando esa idea de tablero, pensé cómo debería ser el programa, así que hagámoslo, pero sigamos en español. Primero, habrá 3 archivos principales, después de esto (no ahora) te voy a pedir los tests de cada código, pero lo primero es lo primero, los archivos (que estarán en español) serán: interfaz.py, piezas.py y tablero.py.
+
+(Este ajedrez no es el juego tal cual, estoy diseñando este juego mucho más facilmente, donde el objetivo es comer todas las piezas del rival, y no hay ninguna regla especial como jaque, jaque mate, enroque, tablas, etc.
+Los movimientos del ajedrez se deberian mostrar en la misma notacion descriptiva que se usa para usar ajedrez salvo movimientos especiales. De esta forma el tablero se deberia numerar con filas con numeros y columnas con letras)
+
+Con estos 3 archivos vamos a hacer la siguiente secuencia de manera que interfaz donde va a estar el main, se comunique con tablero y piezas que van a contener las clases y los datos iniciales, y los metodos para cambiar los atributos:
+1. Pregunta desde la interfaz al usuario sobre lo que quiere hacer
+	a. Iniciar el juego: Imprime el tablero
+	b. Cerrar: exit()
+2. Si inicio el juego pregunta otra vez (a esta pregutna se volvera cada vez que se complete un movimiento)
+	a. Si decide mover sigue
+	b. Finalizar juego: termina en un empate
+3. En caso de haber movido se indica que pieza debe mover (blancas al principio) y se da una opcion de todas las piezas que tienen movimientos posibles, para esto:
+	a. Se debe verificar en pieza.py el movimiento que tienen las piezas en la clase en la que esten (diferentes piezas tienen diferentes clases con atributos como color, casilla en la que se encuentra, color de casilla en la que se encuentra; y diferentes metodos como mover pieza que indica el camino) 
+	b. Se compara el camino con la tabla, viendo que las casillas por las que debe pasar no esten ocupadas (salvo en caso del caballo)
+	c. Se verifica que la casilla del fin no este ocupada (si esta ocupada por mi no se permite el movimiento y si esta ocupada por el contrincante si)
+	d. si se cumplen los requisitos entonces se va a mostrar en la lista la clase de la ficha que se puede mover (por ejemplo al principio solo se van a mostrar peon y caballo)
+4. Por ejemplo al elegir una clase de pieza como peon, se deberian mostrar en otra lista, los diferentes peones que se pueden mover, en este caso se va a tomar el mismo resultado del paso anterior y se va a mostrar para cada peon especifico. Tambien deberia haber una opcion para volver un paso.
+5. Al elegir el peon que se quiere mover se deberia decir los posibles movimientos de ese peon en especifico, mismo procedimiento, pero para los diferentes movimientos de un solo peon. Tambien deberia haber una opcion para volver un paso.
+6. Al elegir un movimiento al momento de efectuarlo deberian cumplirse los siguientes pasos:
+	a. Se reemplaza la casilla o la pieza por la pieza que se movio, el atributo de la pieza se usa para volver a colocar el cuadrado de color respectivo en el tablero y se cambian los atributos a su nueva casilla
+	b. Verificar si se acabaron las piezas del contrincante, si si gana, si no sigue
+	c. Printear un mensaje que diga exactamente lo que paso (el movimiento en lenguaje de ajedrez descriptivo) y el tablero actualizado
+	d. Volver a la pregunta del paso 2
