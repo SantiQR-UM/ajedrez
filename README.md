@@ -15,6 +15,8 @@ Voy a decirles lo básico, los movimientos de las fichas son las mismas que en o
 
 Bueno, la forma de ganar es que un jugador se coma todas las piezas del otro, o que se le acaben las posibilidades de mover a alguno o a otro (re largo...), así que les agregue una funcionalidad para que en cualquier momento lo puedan empatar y decidir quien ganó haciendo piedra, papel o tijera... No me jodan.
 
+Para hacerlo funcionar ejecuten "interfaz.py".
+
 ## Nota del autor
 
 Sí, soy un comilón... Era un proyecto para hacer en 3 meses, pero no tenía nada que hacer así que lo hice en 3 días... 
