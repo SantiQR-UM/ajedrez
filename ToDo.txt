@@ -21,7 +21,7 @@ Una pregunta que se le da al jugador, y este diga el movimiento que ha hecho
 
 Una comunicacion desde la interfaz cliente hacia el juego
 
-Dos archivos, una interfaz cliente, y un juego
+Dos archivos, una interfaz cliente, y un juego?
 
 Archivo piezas: archivos chicos.
 
@@ -45,8 +45,6 @@ print(u"\u25a1")
 - Changelog.md (descriptivo breve para saber que se hizo cada dia)
 
 - Docker Engine, circleci, codeclimate (con nota A)
-
-- Lo que se entrega son 5 lineas?
 
 - Sprints de 14 días: 10 commits con 10 fechas diferentes:
     - No cumplir los commits implica recursar

@@ -1,3 +1,4 @@
+# Solo la uso para iniciar Pieza y Espacio.
 class Casilla:
     def __init__(self, var, color, s):
         self.__color__ = color
