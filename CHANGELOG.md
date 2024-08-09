@@ -30,7 +30,7 @@ y este proyecto se adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.
 
 ### Cambiado
 
-- Modifiqué los nombres de los atributos para que sean como "__atributo__"
+- Modifiqué los nombres de los atributos para que esten rodeados de un doble underscore "__"
 - Cambié la forma en la que se crea el tablero, haciendolo menos grafico y
   más legible usando loops.
 - Cambié el nombre de la clase `Casilla` por `Espacio` e hice que la clase
