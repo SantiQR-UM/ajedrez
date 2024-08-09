@@ -5,7 +5,7 @@
 Este juego de ajedrez es un juego más simplón que el original, pero fue hecho
 con mucho amor (y velocidad), así que disfruten.
 
-## :wheelchair: ¿Cómo jugar?
+## :wheelchair:   ¿Cómo jugar?
 
 El juego se juega de a 2 jugadores, a cada uno se le asigna movimientos, y...
 Dudo que no sepan jugar ajedrez, y si no saben leeanse unas reglas, no estas, no
@@ -18,14 +18,14 @@ Bueno, la forma de ganar es que un jugador se coma todas las piezas del otro, o 
 - Para hacerlo funcionar ejecuten "interfaz.py".
 - Necesitan Python 3.8
 
-## :black_nib: Nota del autor
+## :black_nib:   Nota del autor
 
 Sí, soy un comilón... Era un proyecto para hacer en 3 meses, pero no tenía nada que hacer así que lo hice en 3 días... 
 
 De todas formas, espero que lo disfruten. ¿Suerte?, supongo... :smiley:
 
 
-# :bar_chart: Testeos
+# :bar_chart:   Testeos
 
 ## Circle CI
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/um-computacion-tm/ajedrez-2024-SantiQR-UM/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/um-computacion-tm/ajedrez-2024-SantiQR-UM/tree/main)
