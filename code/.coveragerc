@@ -1,22 +1,17 @@
 [run]
 source =
-    main
-    test
+    interfaz
+    piezas
+    tablero
+    BD
+    test_interfaz
+    test_piezas
+    test_tablero
+    test_BD
 omit =
     venv/*
     */test*
     */__init__.py
-    .gitignore
-    LICENSE
-    CHANGELOG.md
-    README.md
-    .codeclimate.yml
-    .coverage
-    .coveragerc
-    __pycache__
-    requirements.txt
-    ToDo.txt
-    Prompt.txt
 [report]
 exclude_lines =
     pragma: no cover
