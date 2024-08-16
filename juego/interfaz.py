@@ -101,11 +101,7 @@ def opciones_2(juego, opcion):
 
     # Para depurar:
     # print("count: ",count)
-    resultado = opciones_3(juego, elegir, count)
-    return resultado
-    
 
-def opciones_3(juego, elegir, count):
     # Pido la opción de la instancia, si falla, vuelve al bucle.
     opcion_2 = input("\nSeleccione una pieza: ") # Para elegir una pieza o salir
 
