@@ -35,33 +35,18 @@ checks:
   similar-code:
     enabled: true
     config:
-      threshold:
+      threshold: #language-specific defaults. overrides affect all languages.
   identical-code:
     enabled: true
     config:
-      threshold:
+      threshold: #language-specific defaults. overrides affect all languages.
 
 exclude_patterns:
-- "test"
-- "test/" 
-- "tests/"
-- "spec/"
 - "config/"
 - "db/"
 - "dist/"
 - "features/"
 - "venv/"
-- "**/node_modules/"
-- "**/spec/"
+- "test/"
+- "*/test/"
 - "**/test/"
-- "**/tests/"
-- "**/vendor/"
-- "**/*_test.go"
-- "**/*.d.ts"
-- "**/*.js"
-- "**/*.js.map"
-- "**/*.json"
-- "**/*.jsx"
-- "**/*.ts"
-- "**/*.tsx"
-
