@@ -4,7 +4,9 @@ def main():
     juego = Ajedrez()
     
     while True:
-        print("\n¿Qué desea hacer?\n1. Iniciar el juego\n2. Cerrar")
+        print("\n¿Qué desea hacer?")
+        print("1. Iniciar el juego")
+        print("2. Cerrar")
         opcion = input("\nSeleccione una opción: ")
 
         if opcion == "1":
@@ -23,7 +25,8 @@ def iniciar_juego(juego):
     while True:
         imprimir_tablero(juego)
 
-        print("\n1. Mover pieza (" + juego.__turno__ + "s mueven)\n2. Finalizar juego (Empate)")
+        print("\n1. Mover pieza (" + juego.__turno__ + "s mueven)")
+        print("2. Finalizar juego (Empate)")
         accion = input("\nSeleccione una opción: ")
 
         if accion == "1":
