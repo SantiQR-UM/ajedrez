@@ -13,13 +13,11 @@ class Casilla:
 class Espacio(Casilla):
     pass
 
-# Ya no sirven num ni color_casilla.
+
 class Pieza(Casilla):
     def __init__(self, var, color, posicion, s, nom, vive = True):
         super().__init__(var, color, s)
         self.__posicion__ = posicion
-        # self.__color_casilla__ = color_casilla
-        # self.__num__ = num
         self.__vive__ = vive
         self.__nom__ = nom # Nombre de la pieza.
 
@@ -30,7 +28,6 @@ class Pieza(Casilla):
     # Actualiza la posición de la pieza.
     def mover(self, nueva_posicion):
         self.__posicion__ = nueva_posicion
-        # self.__color_casilla__ = nuevo_color_casilla
 
 
     # Función común para calcular movimientos basados en direcciones y movimientos individuales.
@@ -48,7 +45,8 @@ class Pieza(Casilla):
                 nueva_y += dy
                 if 1 <= nueva_x <= 8 and 1 <= nueva_y <= 8:
                     posiciones_posibles.append((nueva_x, nueva_y))
-                    if limite:  # Si el movimiento tiene un solo paso (como en Rey o Caballo)
+                    # Si el movimiento tiene un solo paso (como en Rey o Caballo).
+                    if limite:  
                         break
                 else:
                     break
@@ -70,6 +68,7 @@ class Peon(Pieza):
         posiciones_posibles = []
         x, y = self.__posicion__
 
+        # Acá no uso la función 'calcular_movimientos' porque los movimientos son específicos.
         # Defino el avance según el color.
         avance_doble, avance_simple = (-2, -1) if self.__color__ == "blanca" else (2, 1)
 
@@ -86,9 +85,12 @@ class Peon(Pieza):
     def movimientos_captura(self):
         # Defino los movimientos diagonales según el color.
         movimientos = [(-1, -1), (1, -1)] if self.__color__ == "blanca" else [(-1, 1), (1, 1)]
+        # En este caso uso la función 'calcular_movimientos' con 'limite' en True.
         limite = True
         return self.calcular_movimientos(self.__posicion__, movimientos, limite)
 
+    # La función mover, pero más específica para el peón. Ya que cambia el atributo 
+    # 'primera_posicion'.
     def mover(self, nueva_posicion):
         self.__posicion__ = nueva_posicion
         self.__primera_posicion__ = False

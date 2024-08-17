@@ -3,7 +3,7 @@ from juego.piezas import *
 
 class TestPiezas(unittest.TestCase):
 
-    # Ya no se usan num ni color_casilla.
+    # Creo algunas piezas para testear.
     def setUp(self):
         self.__peon__ = Peon("P1", "blanca", (1, 7), u"\u2659", "Peon")
         self.__peon2__ = Peon("P2", "blanca", (2, 7), u"\u2659", "Peon", False)
@@ -56,21 +56,16 @@ class TestPiezas(unittest.TestCase):
         self.assertIn((5, 7), posibles_movimientos)
     
     # Testeo la función mover_pieza para una pieza normal y un peon.
-    # Ya no se usa color_casilla.
 
     def test_mover_pieza(self):
         x, y = (3, 6)
-        # nuevo_color_casilla = 'negra'
         self.__caballo__.mover((x, y))
         # Me aseguro de que se hallan actualizado los atributos de la pieza.
-        # self.assertEqual(self.__caballo__.__color_casilla__, nuevo_color_casilla)
         self.assertEqual(self.__caballo__.__posicion__, (x, y))
     
     def test_mover_peon(self):
         x, y = (1, 6)
-        # nuevo_color_casilla = 'negra'
         self.__peon__.mover((x, y))
-        # self.assertEqual(self.__peon__.__color_casilla__, nuevo_color_casilla)
         self.assertEqual(self.__peon__.__posicion__, (x, y))
 
 if __name__ == "__main__":

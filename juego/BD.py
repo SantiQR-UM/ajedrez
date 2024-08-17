@@ -1,6 +1,4 @@
-# Si se quiere usar la última función de esta clase, se puede usar esto:
-# from juego.piezas import Espacio 
-
+# En la BD almaceno las instancias de pieza y los espacios para buscarlos.
 class BD():
     def __init__(self):
         self.__base_datos__ = {}
@@ -11,10 +9,4 @@ class BD():
 
     def search(self, var):
         return self.__base_datos__[var]
-    
-    # Para buscar un espacio de un color dado y que devuelva su var.
-    # Al final no se usa, pero si se quiere, puede usar esto.
-    # def search_espacio(self, color):
-    #     for key, obj in self.__base_datos__.items():
-    #         if isinstance(obj, Espacio) and obj.__color__ == color:
-    #             return obj.var()
+

@@ -252,6 +252,7 @@ class TestTablero(unittest.TestCase):
         movido = self.__tablero__.mover_pieza(pieza, 'a3', (1, 6), ('a','2'), [(1, 6)])
         self.assertTrue(movido)
     
+
     @patch('builtins.print')
     def test_mover_pieza_comer(self, mock_print):
         pieza_mock = MagicMock(spec=Peon)
@@ -279,6 +280,7 @@ class TestTablero(unittest.TestCase):
         resultado = self.__tablero__.verificar_victoria()
         self.assertEqual(resultado, "¡Empate por movimientos!")
 
+
     @patch('builtins.print')
     def test_victoria_por_movimientos_negras_ganan(self, mock_print):
         # Todas las piezas blancas se quedan sin movimientos posibles.
@@ -290,6 +292,7 @@ class TestTablero(unittest.TestCase):
 
         resultado = self.__tablero__.verificar_victoria()
         self.assertEqual(resultado, "¡El jugador negro ha ganado por movimientos!")
+
 
     @patch('builtins.print')
     def test_victoria_por_movimientos_blancas_ganan(self, mock_print):
@@ -303,9 +306,10 @@ class TestTablero(unittest.TestCase):
         resultado = self.__tablero__.verificar_victoria()
         self.assertEqual(resultado, "¡El jugador blanco ha ganado por movimientos!")
 
+
     @patch('builtins.print')
     def test_victoria_por_piezas_blancas_ganan(self, mock_print):
-        # Todas las piezas negras son comidas.
+        # El rey negro es comido.
         for pieza in self.__tablero__.__BD_piezas__.__base_datos__.values():
             if pieza.__color__ == 'negra':
                 pieza.__vive__ = False
@@ -313,15 +317,17 @@ class TestTablero(unittest.TestCase):
         resultado = self.__tablero__.verificar_victoria()
         self.assertEqual(resultado, "¡El jugador blanco ha ganado por capturar al rey negro!")
 
+
     @patch('builtins.print')
     def test_victoria_por_piezas_negras_ganan(self, mock_print):
-        # Todas las piezas blancas son comidas.
+        # El rey blanco es comido.
         for pieza in self.__tablero__.__BD_piezas__.__base_datos__.values():
             if pieza.__color__ == 'blanca':
                 pieza.__vive__ = False
 
         resultado = self.__tablero__.verificar_victoria()
         self.assertEqual(resultado, "¡El jugador negro ha ganado por capturar al rey blanco!")
+
 
     @patch('builtins.print')
     def test_verificar_victoria_none(self, mock_print):

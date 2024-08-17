@@ -8,7 +8,6 @@ class Tablero:
     # Método para crear el tablero inicial.
     def crear_tablero_inicial(self):
         # Creo las piezas y los espacios:
-        # Quite los atributos 'num' y 'color_casilla' de las piezas.
 
         #Piezas blancas.
         info_piezas = [
@@ -120,6 +119,7 @@ class Tablero:
         return string_tablero
     
     # Método para obtener las piezas movibles.
+    # Llama a submétodos.
     def obtener_piezas_movibles(self, color):
         # Devuelvo una lista de nombres de piezas que pueden moverse para el color dado.
         # Luego una lista de las instancias de esas piezas.
@@ -141,9 +141,14 @@ class Tablero:
 
         # Hago la iteración para recorrer todas las piezas.
         for i in range(1, 17):
+            # Mando a buscar la letra y la cantidad de la pieza según su rango.
             letra, cant = self.obtener_letra_y_cantidad(piezas, i, color)
-            resultado, movible, posibilidades = self.instancias_piezas(self.__BD_piezas__, letra, cant)
 
+            # Mando a buscar las instancias de las piezas.
+            resultado, movible, posibilidades = self.instancias_piezas\
+                                                (self.__BD_piezas__, letra, cant)
+
+            # Agrego las piezas a las listas correspondientes.
             if movible:
                 if resultado.__nom__ not in lista_piezas:
                     lista_piezas.append(resultado.__nom__)
@@ -151,11 +156,11 @@ class Tablero:
                     lista_instancias.append(resultado)
                     lista_posibilidades.append(posibilidades)
 
+        # Devuelvo el tablero, las listas de piezas, instancias y posibilidades.
         return self, lista_piezas, lista_instancias, lista_posibilidades
 
     # Método para obtener la letra y la cantidad de la pieza según su rango.
     def obtener_letra_y_cantidad(self, piezas, i, color):
-        # Obtiene la letra y la cantidad de la pieza según su rango.
         for inicio, fin, letra_blanca, letra_negra in piezas:
             if inicio <= i <= fin:
                 cant = i - inicio + 1
@@ -166,7 +171,7 @@ class Tablero:
     def instancias_piezas(self, BD_piezas, letra, i):
         
         # Uso el método 'search' para repasar la BD de piezas, donde están las instancias, 
-        # entregando el valor var (usando la letra más el numero de pieza).
+        # entregando el valor var (usando la letra más el número de pieza).
         pieza = BD_piezas.search(letra + str(i))
         # Reviso si se puede mover.
         movible, posibilidades = self.movible(pieza)  
@@ -175,7 +180,7 @@ class Tablero:
         return pieza, movible, posibilidades
         
     # Método principal para verificar si una pieza puede moverse.
-    # Este llama a todos los otros métodos.
+    # Este llama a submétodos.
     def movible(self, pieza):
         # Me fijo si la pieza está viva y obtengo los movimientos posibles.
         # Luego, filtro los movimientos posibles según las reglas del juego.
@@ -207,17 +212,24 @@ class Tablero:
         for posicion in posibilidades:
             x, y = posicion
             
+            # Aunque ya está hecha la verificación en el método 'movimientos_posibles', lo hago
+            # de nuevo por si acaso.
             if not (1 <= x <= 8 and 1 <= y <= 8):
                 continue
 
             casilla = self.__tablero__[y][x]
 
+            # Primero, si la pieza no es peón:
             if not isinstance(pieza, Peon):
+                # Si la casilla está vacía.
                 if isinstance(casilla, Espacio):
                     posibilidades_checked.append(posicion)
+                # Si la casilla tiene una pieza de distinto color.
                 elif isinstance(casilla, Pieza) and casilla.__color__ != pieza.__color__:
                     posibilidades_checked.append(posicion)
+            # Si la pieza es peón:
             else:
+                # Lo mando a verificar según el tipo de movimiento.
                 if self.filtrar_movimiento_vertical_peon(pieza, x, y, casilla):
                     posibilidades_checked.append(posicion)
                 elif self.filtrar_movimiento_diagonal_peon(pieza, x, y, casilla):
@@ -228,6 +240,7 @@ class Tablero:
     # Parte 1 del método filtrar_movimientos.
     def filtrar_movimiento_vertical_peon(self, peon, x, y, casilla):
         # Verifica si el movimiento vertical del peón es válido.
+        # Primero vé si está en las posibilidades y después si está vacío.
         flag = True
         if abs(peon.__posicion__[0] - x) != 0:
             flag = False
@@ -240,6 +253,7 @@ class Tablero:
     # Parte 2 del método filtrar_movimientos.
     def filtrar_movimiento_diagonal_peon(self, peon, x, y, casilla):
         # Verifica si el movimiento diagonal del peón es válido.
+        # Si está en las posibilidades y si hay una pieza de otro color.
         flag = True
         if abs(peon.__posicion__[0] - x) != 1:
             flag = False
@@ -256,7 +270,9 @@ class Tablero:
         # Verifico si el camino entre el origen y el destino está libre.
         posibilidades_double_checked = []
 
+        # Por cada una de las posiciones:
         for posicion in posibilidades_checked:
+            # Mando a ver en la siguiente función.
             if self.es_camino_libre(pieza, posicion):
                 posibilidades_double_checked.append(posicion)
 
@@ -265,15 +281,19 @@ class Tablero:
     # Parte 1 del método verificar_camino_libre.
     def es_camino_libre(self, pieza, posicion):
         # Verifica si el camino está libre para una pieza específica.
+        # Si es caballo, directamente lo devuelve.
         if isinstance(pieza, Caballo):
             return True
 
+        # Define inicio y final.
         x_start, y_start = pieza.__posicion__
         x_end, y_end = posicion
 
+        # Define las direcciónes.
         dx = self.calcular_direccion(x_start, x_end)
         dy = self.calcular_direccion(y_start, y_end)
 
+        # Lo manda a verificar.
         parametros = (x_start, y_start, x_end, y_end, dx, dy)
         return self.verificar_casillas_libres(parametros)
 
@@ -288,9 +308,13 @@ class Tablero:
     def verificar_casillas_libres(self, parametros):
         # Verifica si todas las casillas en el camino están libres.
         x_start, y_start, x_end, y_end, dx, dy = parametros
+
+        # Define hacia adonde es el avance.
         x_avance, y_avance = x_start + dx, y_start + dy
 
+        # Mientras no se choque con nada se sigue moviendo por el camino.
         while x_avance != x_end or y_avance != y_end:
+            # Si hay algo devuelve False.
             if isinstance(self.__tablero__[y_avance][x_avance], Pieza):
                 return False
             x_avance += dx
@@ -299,14 +323,12 @@ class Tablero:
         return True             
 
     # Este es el método que se llama para mover una pieza.
-    def mover_pieza(self, pieza, nueva_posicion_str, \
-                    nueva_posicion_int, vieja_posicion, posibilidades):
+    def mover_pieza(self, pieza, nueva_posicion_str, nueva_posicion_int, \
+                    vieja_posicion, posibilidades):
         # Acá está la logica para mover la pieza.
         
-
-        x, y = nueva_posicion_int
-
         # Obtengo la casilla destino.
+        x, y = nueva_posicion_int
         casilla_destino = self.__tablero__[y][x]
 
         x_vieja, y_vieja = vieja_posicion
@@ -320,7 +342,7 @@ class Tablero:
         
             # Actualizo el estado de la pieza capturada.
             casilla_destino.__vive__ = False
-
+        # Si es un espacio vacío.
         else:
             string_movimiento += f"\nMovimiento realizado: {pieza.__nom__} {pieza.__color__} {x_vieja}{y_vieja}"
             string_movimiento += f" se ha movido a {nueva_posicion_str}\n"
@@ -329,19 +351,15 @@ class Tablero:
         # Saco las viejas coordenadas.
         x_actual, y_actual = pieza.__posicion__
         # Restauro la casilla original con el espacio correspondiente.
-        self.__tablero__[y_actual][x_actual] = self.__BD_espacios__.search('B' if (x_actual + y_actual) \
-                                                                            % 2 == 0 else 'N')
+        self.__tablero__[y_actual][x_actual] = self.__BD_espacios__.search\
+                                               ('B' if (x_actual + y_actual) % 2 == 0 else 'N')
         # Coloco la pieza en la nueva posición.
         self.__tablero__[y][x] = pieza  
 
-        # Actualizo los atributos de la pieza con la nueva posición de la pieza y 
-        # ya no más su nuevo color de casilla. Ya que no estoy usando este atributo.
-        # De todas formas, lo dejo por si acaso.
-        ## nuevo_color_casilla = 'blanca' if casilla_destino.__color__ == 'blanca' else 'negra'
-        pieza.mover((x, y)) # , nuevo_color_casilla)
+        # Actualizo los atributos de la pieza con la nueva posición de la pieza.
+        pieza.mover((x, y))
 
-        return string_movimiento # Devuelvo que se completó el movimiento 
-                                       # y el string para printear.
+        return string_movimiento # Devuelvo que se completó el movimiento y el string para printear.
 
     # Este es el método principal para verificar si el juego ha terminado.
     def verificar_victoria(self):
@@ -372,11 +390,13 @@ class Tablero:
     # Submétodo de verificar_victoria
     def victoria_por_piezas(self):
         # Reviso si el rey de cada jugador sigue vivo.
-        rey_blanco_vivo = any(pieza.__nom__ == "Rey" and pieza.__color__ == 'blanca' and pieza.__vive__ 
-                            for pieza in self.__BD_piezas__.__base_datos__.values())
-        rey_negro_vivo = any(pieza.__nom__ == "Rey" and pieza.__color__ == 'negra' and pieza.__vive__ 
-                            for pieza in self.__BD_piezas__.__base_datos__.values())
+        rey_blanco_vivo = any(pieza.__nom__ == "Rey" and pieza.__color__ == 'blanca' 
+                    and pieza.__vive__ for pieza in self.__BD_piezas__.__base_datos__.values())
+        
+        rey_negro_vivo = any(pieza.__nom__ == "Rey" and pieza.__color__ == 'negra'
+                    and pieza.__vive__ for pieza in self.__BD_piezas__.__base_datos__.values())
 
+        # Creo el string vacío.
         string_victoria = ""
 
         if not rey_blanco_vivo:

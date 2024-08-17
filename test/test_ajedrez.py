@@ -6,9 +6,11 @@ import sys
 from io import StringIO
 
 class TestAjedrez(unittest.TestCase):
+
     def setUp(self):
         self.ajedrez = Ajedrez()
 
+    # Testeo que se pueda cambiar de turno.
     def test_cambiar_turno(self):
         self.assertEqual(self.ajedrez.__turno__, "blanca")
         self.ajedrez.cambiar_turno()
@@ -16,17 +18,20 @@ class TestAjedrez(unittest.TestCase):
         self.ajedrez.cambiar_turno()
         self.assertEqual(self.ajedrez.__turno__, "blanca")
 
+    # Testeo que me dé las listas llenas.
     def test_jugar(self):
         self.ajedrez.jugar()
         self.assertIsNotNone(self.ajedrez.__lista_piezas__)
         self.assertIsNotNone(self.ajedrez.__lista_instancias__)
         self.assertIsNotNone(self.ajedrez.__lista_posibilidades__)
 
+    # Testeo que se pueda imprimir el tablero de ajedrez.
     def test_imprimir_tablero_ajedrez(self):
-        # Redirect stdout to capture the output
+        # Redirije el output para compararlo.
         captured_output = StringIO()
         sys.stdout = captured_output
 
+        # Imprime el tablero.
         self.ajedrez.imprimir_tablero_ajedrez()
 
         sys.stdout = sys.__stdout__
@@ -41,6 +46,7 @@ class TestAjedrez(unittest.TestCase):
 1 ♖ ♘ ♗ ♕ ♔ ♗ ♘ ♖ 1 
   a b c d e f g h   ''' in captured_output.getvalue()  # Es medio feo, pero funciona jajaja.
 
+    # Testeo que pase bien los datos y que se pueda mover una pieza.
     def test_mover_ajedrez(self):
         seleccion = MagicMock()
         seleccion.__nom__ = "Peon"
@@ -58,9 +64,11 @@ class TestAjedrez(unittest.TestCase):
 
         self.assertEqual(string_movimiento, "\nMovimiento realizado: Peon negra b7 se ha movido a b5\n")
 
+    # Testeo que se pueda verificar el fin del juego.
     def test_verificar_fin(self):
         self.ajedrez.__tablero__ = Tablero()
         self.assertFalse(self.ajedrez.verificar_fin())
+
 
 if __name__ == '__main__':
     unittest.main()
