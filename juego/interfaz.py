@@ -44,6 +44,7 @@ class Juego:
                 string_fin = self.ajedrez.verificar_fin()
                 if string_fin is not "":
                     print(string_fin)
+                    InterfazDeUsuario.imprimir_tablero(self.ajedrez)
                     break
 
                 self.ajedrez.cambiar_turno()
