@@ -337,16 +337,17 @@ class Tablero:
         
         # Verifico si hay una pieza en la casilla destino.
         # Si casilla es una instancia pieza digo que la capturó.
+        string_movimiento = ""
         if isinstance(casilla_destino, Pieza):
-            print(f"\nMovimiento realizado: {pieza.__nom__} {pieza.__color__} {x_vieja}{y_vieja}", \
-                f"ha capturado {casilla_destino.__nom__} {casilla_destino.__color__} en {nueva_posicion_str}\n")
+            string_movimiento += f"\nMovimiento realizado: {pieza.__nom__} {pieza.__color__} {x_vieja}{y_vieja}"
+            string_movimiento += f" ha capturado {casilla_destino.__nom__} {casilla_destino.__color__} en {nueva_posicion_str}\n"
         
             # Actualizo el estado de la pieza capturada.
             casilla_destino.__vive__ = False
 
         else:
-            print(f"\nMovimiento realizado: {pieza.__nom__} {pieza.__color__} {x_vieja}{y_vieja}", \
-                f"se ha movido a {nueva_posicion_str}\n")
+            string_movimiento += f"\nMovimiento realizado: {pieza.__nom__} {pieza.__color__} {x_vieja}{y_vieja}"
+            string_movimiento += f" se ha movido a {nueva_posicion_str}\n"
 
         # Actualizo el tablero con la nueva posición de la pieza:
         # Saco las viejas coordenadas.
@@ -363,14 +364,15 @@ class Tablero:
         ## nuevo_color_casilla = 'blanca' if casilla_destino.__color__ == 'blanca' else 'negra'
         pieza.mover((x, y)) # , nuevo_color_casilla)
 
-        return True # Devuelvo que se completó el movimiento.
+        return True, string_movimiento # Devuelvo que se completó el movimiento 
+                                       # y el string para printear.
 
     
     def verificar_victoria(self):
         # Verifico si el juego ha terminado.
 
         # Para una victoria por piezas:
-        piezas_blancas_vivas, piezas_negras_vivas = self.victoria_por_piezas()
+        string_victoria, piezas_blancas_vivas, piezas_negras_vivas = self.victoria_por_piezas()
 
         # Para una victoria por movimientos:
         # Reviso si hay al menos un movimiento posible para cada jugador.
@@ -378,18 +380,15 @@ class Tablero:
         movimientos_negras = any(self.movible(pieza)[0] for pieza in piezas_negras_vivas)
 
         if not movimientos_blancas and not movimientos_negras:
-            print("¡Empate por movimientos!")
-            exit()
+            string_victoria += "¡Empate por movimientos!"
 
         if not movimientos_blancas:
-            print("¡El jugador negro ha ganado por movimientos!")
-            exit()
+            string_victoria += "¡El jugador negro ha ganado por movimientos!"
 
         if not movimientos_negras:
-            print("¡El jugador blanco ha ganado por movimientos!")
-            exit()
+            string_victoria += "¡El jugador blanco ha ganado por movimientos!"
 
-        return None # Devuelvo que no hay victoria.
+        return string_victoria # Devuelvo el string de victoria, si está vacío no pasó nada.
     
     def victoria_por_piezas(self):
 
@@ -399,12 +398,13 @@ class Tablero:
         piezas_negras_vivas = [pieza for pieza in self.__BD_piezas__.__base_datos__.values() if \
                                 pieza.__color__ == 'negra' and pieza.__vive__]
 
+        string_victoria = ""
+
         if not piezas_blancas_vivas:
-            print("¡El jugador negro ha ganado por piezas!")
-            exit()
+            string_victoria += "¡El jugador negro ha ganado por piezas!"
 
         if not piezas_negras_vivas:
-            print("¡El jugador blanco ha ganado por piezas!")
-            exit()
+            string_victoria += "¡El jugador blanco ha ganado por piezas!"
         
-        return piezas_blancas_vivas, piezas_negras_vivas # Devuelvo las piezas vivas de cada jugador.
+        # Devuelvo las piezas vivas de cada jugador.
+        return string_victoria, piezas_blancas_vivas, piezas_negras_vivas 
