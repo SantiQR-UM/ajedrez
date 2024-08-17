@@ -37,10 +37,10 @@ class Ajedrez:
     def mover_ajedrez(self, seleccion, nueva_posicion_str, \
                       nueva_posicion_int, vieja_posicion, posibilidades_finales):
         
-        movimiento, string_movimiento = self.__tablero__.mover_pieza(seleccion, nueva_posicion_str, \
+        string_movimiento = self.__tablero__.mover_pieza(seleccion, nueva_posicion_str, \
                       nueva_posicion_int,vieja_posicion, posibilidades_finales)
         
-        return self, movimiento, string_movimiento
+        return self, string_movimiento
 
 
     def verificar_fin(self):

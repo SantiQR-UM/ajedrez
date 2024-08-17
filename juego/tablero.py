@@ -161,7 +161,6 @@ class Tablero:
                 cant = i - inicio + 1
                 letra = letra_blanca if color == "blanca" else letra_negra
                 return letra, cant
-        return None, None
 
     # Método para obtener las instancias movibles de las piezas.
     def instancias_piezas(self, BD_piezas, letra, i):
@@ -304,10 +303,6 @@ class Tablero:
                     nueva_posicion_int, vieja_posicion, posibilidades):
         # Acá está la logica para mover la pieza.
         
-        # Convierto la nueva posición de notación de la tabla a coordenadas.
-        # Esta no va a la función de conversión coordenadas, porque es la 
-        # función inversa, así que lo reviso acá.
-        # Try/Except por si envié un valor incorrecto.
 
         x, y = nueva_posicion_int
 
@@ -345,7 +340,7 @@ class Tablero:
         ## nuevo_color_casilla = 'blanca' if casilla_destino.__color__ == 'blanca' else 'negra'
         pieza.mover((x, y)) # , nuevo_color_casilla)
 
-        return True, string_movimiento # Devuelvo que se completó el movimiento 
+        return string_movimiento # Devuelvo que se completó el movimiento 
                                        # y el string para printear.
 
     # Este es el método principal para verificar si el juego ha terminado.
@@ -355,6 +350,9 @@ class Tablero:
         # Para una victoria por piezas:
         string_victoria, piezas_blancas_vivas, piezas_negras_vivas = self.victoria_por_piezas()
 
+        if string_victoria != "":
+            return string_victoria
+
         # Para una victoria por movimientos:
         # Reviso si hay al menos un movimiento posible para cada jugador.
         movimientos_blancas = any(self.movible(pieza)[0] for pieza in piezas_blancas_vivas)
@@ -363,10 +361,10 @@ class Tablero:
         if not movimientos_blancas and not movimientos_negras:
             string_victoria += "¡Empate por movimientos!"
 
-        if not movimientos_blancas:
+        elif not movimientos_blancas:
             string_victoria += "¡El jugador negro ha ganado por movimientos!"
 
-        if not movimientos_negras:
+        elif not movimientos_negras:
             string_victoria += "¡El jugador blanco ha ganado por movimientos!"
 
         return string_victoria # Devuelvo el string de victoria, si está vacío no pasó nada.

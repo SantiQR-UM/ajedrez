@@ -5,7 +5,7 @@ from juego.ajedrez import Ajedrez
 class Juego:
     def __init__(self):
         # Inicializo una instancia de la clase Ajedrez.
-        self.ajedrez = Ajedrez()
+        self.__ajedrez__ = Ajedrez()
 
 
     def main(self):
@@ -17,6 +17,7 @@ class Juego:
             opcion = input("\nSeleccione una opción: ")
 
             if opcion == "1":
+                self.__init__()
                 self.iniciar_juego()
 
             elif opcion == "2":
@@ -31,23 +32,23 @@ class Juego:
     def iniciar_juego(self):
         # Acá hice el bucle secundario para manejar el juego de ajedrez ya inicializado.
         while True:
-            InterfazDeUsuario.imprimir_tablero(self.ajedrez)
-            print("\n1. Mover pieza (" + self.ajedrez.__turno__ + "s mueven)")
+            InterfazDeUsuario.imprimir_tablero(self.__ajedrez__)
+            print("\n1. Mover pieza (" + self.__ajedrez__.__turno__ + "s mueven)")
             print("2. Finalizar juego (Empate)")
             accion = input("\nSeleccione una opción: ")
 
             if accion == "1":
-                self.ajedrez = Ajedrez.jugar(self.ajedrez)
+                self.__ajedrez__ = Ajedrez.jugar(self.__ajedrez__)
                 
                 self.opciones_1()
                 
-                string_fin = self.ajedrez.verificar_fin()
-                if string_fin is not "":
+                string_fin = self.__ajedrez__.verificar_fin()
+                if string_fin != "":
                     print(string_fin)
-                    InterfazDeUsuario.imprimir_tablero(self.ajedrez)
+                    InterfazDeUsuario.imprimir_tablero(self.__ajedrez__)
                     break
 
-                self.ajedrez.cambiar_turno()
+                self.__ajedrez__.cambiar_turno()
 
             elif accion == "2":
                 print("\nJuego finalizado en empate.\n")
@@ -61,11 +62,11 @@ class Juego:
     def opciones_1(self):
         # Muestro las opciones de selección de piezas.
         while True:
-            InterfazDeUsuario.imprimir_tablero(self.ajedrez)
-            
+            InterfazDeUsuario.imprimir_tablero(self.__ajedrez__)
+
             print("\nOpciones:")
             k = 1
-            for pieza in self.ajedrez.__lista_piezas__:
+            for pieza in self.__ajedrez__.__lista_piezas__:
                 print(f"{k}. {pieza}")
                 k += 1
 
@@ -83,15 +84,15 @@ class Juego:
     def opciones_2(self, opcion):
         # Muestro las opciones de selección de instancias de piezas.
         
-        InterfazDeUsuario.imprimir_tablero(self.ajedrez)
+        InterfazDeUsuario.imprimir_tablero(self.__ajedrez__)
         
         print("\nInstancias de la pieza:")
         count = 1
         elegir = []
-        for z in range(len(self.ajedrez.__lista_instancias__)):
-            if self.ajedrez.__lista_piezas__[opcion-1] == self.ajedrez.__lista_instancias__[z].__nom__:
-                x, y = InterfazDeUsuario.conversion_coordenadas(self.ajedrez.__lista_instancias__[z].__posicion__)
-                print(f"{count}. {self.ajedrez.__lista_instancias__[z].__nom__} {x}{y}")
+        for z in range(len(self.__ajedrez__.__lista_instancias__)):
+            if self.__ajedrez__.__lista_piezas__[opcion-1] == self.__ajedrez__.__lista_instancias__[z].__nom__:
+                x, y = InterfazDeUsuario.conversion_coordenadas(self.__ajedrez__.__lista_instancias__[z].__posicion__)
+                print(f"{count}. {self.__ajedrez__.__lista_instancias__[z].__nom__} {x}{y}")
                 elegir.append(z)
                 count += 1
         print(f"{count}. Atrás")
@@ -107,8 +108,8 @@ class Juego:
         
         else:
             nro_instancia = elegir[opcion_2-1]
-            posibilidades_finales = self.ajedrez.__lista_posibilidades__[nro_instancia]
-            seleccion = self.ajedrez.__tablero__.__BD_piezas__.search(self.ajedrez.__lista_instancias__[nro_instancia].var())
+            posibilidades_finales = self.__ajedrez__.__lista_posibilidades__[nro_instancia]
+            seleccion = self.__ajedrez__.__tablero__.__BD_piezas__.search(self.__ajedrez__.__lista_instancias__[nro_instancia].var())
             nueva_posicion = input("Ingrese la nueva posición (ej. 'a3'): ")
             resultado = self.mover(seleccion, nueva_posicion, posibilidades_finales)
             if resultado:
@@ -124,6 +125,7 @@ class Juego:
             return False
         
         nueva_posicion_int = posicion
+
         posicion = InterfazDeUsuario.conversion_coordenadas(seleccion.__posicion__)
 
         if not posicion:
@@ -135,12 +137,11 @@ class Juego:
             print("\nEste movimiento no es posible.\n")
             return False
         
-        self.ajedrez, movimiento, string_movimiento = self.ajedrez.mover_ajedrez(seleccion, \
+        self.__ajedrez__, string_movimiento = self.__ajedrez__.mover_ajedrez(seleccion, \
             nueva_posicion_str, nueva_posicion_int, vieja_posicion, posibilidades_finales)
         print(string_movimiento)
 
-        if movimiento:
-            return True
+        return True
 
 
 # Ahora creo las funciones especiales que va a tener la interfaz de usuario, como mostrar el tablero.
@@ -159,7 +160,7 @@ class InterfazDeUsuario:
             opcion = int(opcion)
             if opcion > k or opcion == 0:
                 print("\nOpción no válida.\n")
-                return False
+                return opcion, False
             return opcion, True
         except ValueError:
             print("\nOpción no válida.\n")
