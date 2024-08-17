@@ -5,7 +5,7 @@ class Tablero:
     def __init__(self):
         self.__tablero__, self.__BD_piezas__, self.__BD_espacios__ = self.crear_tablero_inicial()
 
-
+    # Método para crear el tablero inicial.
     def crear_tablero_inicial(self):
         # Creo las piezas y los espacios:
         # Quite los atributos 'num' y 'color_casilla' de las piezas.
@@ -104,7 +104,7 @@ class Tablero:
         # Devuelvo el tablero y las BDs para la interfaz.
         return tablero, BD_piezas, BD_espacios
     
-
+    # Método para convertir el tablero en un string.
     def __str__(self):
         string_tablero = "\n"
         for fila in self.__tablero__:
@@ -118,66 +118,52 @@ class Tablero:
                     string_tablero += (str(casilla) + (" "))
             string_tablero += ("\n")
         return string_tablero
-
-
+    
+    # Método para obtener las piezas movibles.
     def obtener_piezas_movibles(self, color):
         # Devuelvo una lista de nombres de piezas que pueden moverse para el color dado.
         # Luego una lista de las instancias de esas piezas.
         # Y después pido la posición a la que se quiere avanzar.
 
-        
-        lista_piezas = [] # Lista para los nombres las piezas que voy a mostrar.
-        lista_instancias = [] # Lista para las instancias de las piezas que voy a mostrar.
-        lista_posibilidades = [] # Lista para las posibilidades de cada una de las piezas.
-        
-        # Para depurar:
-        # print(BD_piezas.__base_datos__)
-        
+        lista_piezas = []  # Lista para los nombres las piezas que voy a mostrar.
+        lista_instancias = []  # Lista para las instancias de las piezas que voy a mostrar.
+        lista_posibilidades = []  # Lista para las posibilidades de cada una de las piezas.
+
         # Para las 16 piezas del jugador:
-        # Lista de tuplas con la información de las piezas y sus rangos
         piezas = [
             (1, 8, "P", "p"),  # Peones
-            (9, 10, "C", "c"), # Caballos
-            (11, 12, "A", "a"),# Alfiles
-            (13, 14, "T", "t"),# Torres
-            (15, 15, "D", "d"),# Dama
-            (16, 16, "R", "r") # Rey
+            (9, 10, "C", "c"),  # Caballos
+            (11, 12, "A", "a"),  # Alfiles
+            (13, 14, "T", "t"),  # Torres
+            (15, 15, "D", "d"),  # Dama
+            (16, 16, "R", "r")  # Rey
         ]
 
         # Hago la iteración para recorrer todas las piezas.
         for i in range(1, 17):
-            
-            for inicio, fin, letra_blanca, letra_negra in piezas:
-                if inicio <= i <= fin:
-                    cant = i - inicio + 1
-                    letra = letra_blanca if color == "blanca" else letra_negra
-                    break
-            
-            # Reviso que piezas puedo mostrar en base a cuales son movibles y sus posibilidades.
+            letra, cant = self.obtener_letra_y_cantidad(piezas, i, color)
             resultado, movible, posibilidades = self.instancias_piezas(self.__BD_piezas__, letra, cant)
-            
-            # Para depurar:
-            # print(resultado, " : ", movible)
 
-            if movible == False:
-                continue # Volver a preguntar por el resto de piezas.
-            
-            # Si se puede mover, añado a la lista de piezas, instancias y posibilidades.
-            # Que solo se pueda añadir una vez en cada una.
-            if resultado.__nom__ not in lista_piezas:
-                lista_piezas.append(resultado.__nom__)
-
-            if resultado not in lista_instancias:
-                lista_instancias.append(resultado)
-                lista_posibilidades.append(posibilidades)
-            
-        # Acá hice la división de la función de obtener_piezas_moviles. La otra parte la mando
-        # a interfaz.py ya que tiene más sentido que el texto se ejecute en la parte de la
-        # interfaz.
+            if movible:
+                if resultado.__nom__ not in lista_piezas:
+                    lista_piezas.append(resultado.__nom__)
+                if resultado not in lista_instancias:
+                    lista_instancias.append(resultado)
+                    lista_posibilidades.append(posibilidades)
 
         return self, lista_piezas, lista_instancias, lista_posibilidades
 
+    # Método para obtener la letra y la cantidad de la pieza según su rango.
+    def obtener_letra_y_cantidad(self, piezas, i, color):
+        # Obtiene la letra y la cantidad de la pieza según su rango.
+        for inicio, fin, letra_blanca, letra_negra in piezas:
+            if inicio <= i <= fin:
+                cant = i - inicio + 1
+                letra = letra_blanca if color == "blanca" else letra_negra
+                return letra, cant
+        return None, None
 
+    # Método para obtener las instancias movibles de las piezas.
     def instancias_piezas(self, BD_piezas, letra, i):
         
         # Uso el método 'search' para repasar la BD de piezas, donde están las instancias, 
@@ -189,7 +175,8 @@ class Tablero:
         # Devuelvo la instancia de la pieza, si es movible (bool) y las posibilidades.
         return pieza, movible, posibilidades
         
-
+    # Método principal para verificar si una pieza puede moverse.
+    # Este llama a todos los otros métodos.
     def movible(self, pieza):
         # Me fijo si la pieza está viva y obtengo los movimientos posibles.
         # Luego, filtro los movimientos posibles según las reglas del juego.
@@ -204,7 +191,7 @@ class Tablero:
         
         return bool(posibilidades_double_checked), posibilidades_double_checked
 
-
+    # Parte 1 del método movible.
     def verificar_viva_y_movimientos(self, pieza):
         # Me fijo si la pieza está viva. Si no lo está, retorno False y una lista vacía.
         # Si está viva, retorno True y la lista de movimientos posibles de la pieza.
@@ -213,11 +200,9 @@ class Tablero:
         
         return True, pieza.movimientos_posibles()
 
-
+    # Parte 2 del método movible.
     def filtrar_movimientos(self, pieza, posibilidades):
-        # Filtro los movimientos posibles según las reglas del juego.
-        # Para piezas que no son peones, verifico si la casilla destino es un espacio vacío o una pieza enemiga.
-        # Para peones, verifico los movimientos verticales y diagonales según las reglas específicas de los peones.
+    # Filtro los movimientos posibles según las reglas del juego.
         posibilidades_checked = []
 
         for posicion in posibilidades:
@@ -229,51 +214,88 @@ class Tablero:
             casilla = self.__tablero__[y][x]
 
             if not isinstance(pieza, Peon):
-                if isinstance(casilla, Espacio) or (isinstance(casilla, Pieza) and casilla.__color__ != pieza.__color__):
+                if isinstance(casilla, Espacio):
                     posibilidades_checked.append(posicion)
-
+                elif isinstance(casilla, Pieza) and casilla.__color__ != pieza.__color__:
+                    posibilidades_checked.append(posicion)
             else:
-                if abs(pieza.__posicion__[0] - x) == 0 and abs(pieza.__posicion__[1] - y) in [1, 2] and isinstance(casilla, Espacio):
+                if self.filtrar_movimiento_vertical_peon(pieza, x, y, casilla):
                     posibilidades_checked.append(posicion)
-
-                elif abs(pieza.__posicion__[0] - x) == 1 and abs(pieza.__posicion__[1] - y) == 1 and isinstance(casilla, Pieza) and casilla.__color__ != pieza.__color__:
+                elif self.filtrar_movimiento_diagonal_peon(pieza, x, y, casilla):
                     posibilidades_checked.append(posicion)
 
         return posibilidades_checked
 
+    # Parte 1 del método filtrar_movimientos.
+    def filtrar_movimiento_vertical_peon(self, peon, x, y, casilla):
+        # Verifica si el movimiento vertical del peón es válido.
+        if abs(peon.__posicion__[0] - x) != 0:
+            return False
+        if abs(peon.__posicion__[1] - y) not in [1, 2]:
+            return False
+        if not isinstance(casilla, Espacio):
+            return False
+        return True
 
+    # Parte 2 del método filtrar_movimientos.
+    def filtrar_movimiento_diagonal_peon(self, peon, x, y, casilla):
+        # Verifica si el movimiento diagonal del peón es válido.
+        if abs(peon.__posicion__[0] - x) != 1:
+            return False
+        if abs(peon.__posicion__[1] - y) != 1:
+            return False
+        if not isinstance(casilla, Pieza):
+            return False
+        if casilla.__color__ == peon.__color__:
+            return False
+        return True
+
+    # Parte 3 del método movible.
     def verificar_camino_libre(self, pieza, posibilidades_checked):
-        # Verifico si el camino entre el origen y el destino está libre.
-        # Para los caballos, no necesito verificar el camino.
-        # Para otras piezas, verifico cada casilla en el camino para asegurarme de que esté libre.
+    # Verifico si el camino entre el origen y el destino está libre.
         posibilidades_double_checked = []
-        
+
         for posicion in posibilidades_checked:
-            
-            if isinstance(pieza, Caballo):
-                posibilidades_double_checked.append(posicion)
-                continue
-            
-            x_start, y_start = pieza.__posicion__
-            x_end, y_end = posicion
-            
-            dx = 0 if x_end == x_start else (1 if x_end > x_start else -1)
-            dy = 0 if y_end == y_start else (1 if y_end > y_start else -1)
-            
-            x_avance, y_avance = x_start + dx, y_start + dy
-            
-            while x_avance != x_end or y_avance != y_end:
-                if isinstance(self.__tablero__[y_avance][x_avance], Pieza):
-                    break
-                x_avance += dx
-                y_avance += dy
-            
-            else:
+            if self.es_camino_libre(pieza, posicion):
                 posibilidades_double_checked.append(posicion)
 
-        return posibilidades_double_checked                      
+        return posibilidades_double_checked
 
+    # Parte 1 del método verificar_camino_libre.
+    def es_camino_libre(self, pieza, posicion):
+        # Verifica si el camino está libre para una pieza específica.
+        if isinstance(pieza, Caballo):
+            return True
 
+        x_start, y_start = pieza.__posicion__
+        x_end, y_end = posicion
+
+        dx = self.calcular_direccion(x_start, x_end)
+        dy = self.calcular_direccion(y_start, y_end)
+
+        return self.verificar_casillas_libres(x_start, y_start, x_end, y_end, dx, dy)
+
+    # Parte 2 del método verificar_camino_libre.
+    def calcular_direccion(self, start, end):
+        # Calcula la dirección del movimiento.
+        if end == start:
+            return 0
+        return 1 if end > start else -1
+
+    # Parte 3 del método verificar_camino_libre.
+    def verificar_casillas_libres(self, x_start, y_start, x_end, y_end, dx, dy):
+        # Verifica si todas las casillas en el camino están libres.
+        x_avance, y_avance = x_start + dx, y_start + dy
+
+        while x_avance != x_end or y_avance != y_end:
+            if isinstance(self.__tablero__[y_avance][x_avance], Pieza):
+                return False
+            x_avance += dx
+            y_avance += dy
+
+        return True                      
+
+    # Este es el método que se llama para mover una pieza.
     def mover_pieza(self, pieza, nueva_posicion_str, \
                     nueva_posicion_int, vieja_posicion, posibilidades):
         # Acá está la logica para mover la pieza.
@@ -322,7 +344,7 @@ class Tablero:
         return True, string_movimiento # Devuelvo que se completó el movimiento 
                                        # y el string para printear.
 
-    
+    # Este es el método principal para verificar si el juego ha terminado.
     def verificar_victoria(self):
         # Verifico si el juego ha terminado.
 
@@ -345,7 +367,7 @@ class Tablero:
 
         return string_victoria # Devuelvo el string de victoria, si está vacío no pasó nada.
     
-
+    # Submétodo de verificar_victoria
     def victoria_por_piezas(self):
         # Reviso si el rey de cada jugador sigue vivo.
         rey_blanco_vivo = any(pieza.__nom__ == "Rey" and pieza.__color__ == 'blanca' and pieza.__vive__ 
