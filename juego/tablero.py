@@ -229,30 +229,32 @@ class Tablero:
     # Parte 1 del método filtrar_movimientos.
     def filtrar_movimiento_vertical_peon(self, peon, x, y, casilla):
         # Verifica si el movimiento vertical del peón es válido.
+        flag = True
         if abs(peon.__posicion__[0] - x) != 0:
-            return False
+            flag = False
         if abs(peon.__posicion__[1] - y) not in [1, 2]:
-            return False
+            flag = False
         if not isinstance(casilla, Espacio):
-            return False
-        return True
+            flag = False
+        return flag
 
     # Parte 2 del método filtrar_movimientos.
     def filtrar_movimiento_diagonal_peon(self, peon, x, y, casilla):
         # Verifica si el movimiento diagonal del peón es válido.
+        flag = True
         if abs(peon.__posicion__[0] - x) != 1:
-            return False
+            flag = False
         if abs(peon.__posicion__[1] - y) != 1:
-            return False
+            flag = False
         if not isinstance(casilla, Pieza):
-            return False
+            flag = False
         if casilla.__color__ == peon.__color__:
-            return False
-        return True
+            flag = False
+        return flag
 
     # Parte 3 del método movible.
     def verificar_camino_libre(self, pieza, posibilidades_checked):
-    # Verifico si el camino entre el origen y el destino está libre.
+        # Verifico si el camino entre el origen y el destino está libre.
         posibilidades_double_checked = []
 
         for posicion in posibilidades_checked:
@@ -273,7 +275,8 @@ class Tablero:
         dx = self.calcular_direccion(x_start, x_end)
         dy = self.calcular_direccion(y_start, y_end)
 
-        return self.verificar_casillas_libres(x_start, y_start, x_end, y_end, dx, dy)
+        parametros = (x_start, y_start, x_end, y_end, dx, dy)
+        return self.verificar_casillas_libres(parametros)
 
     # Parte 2 del método verificar_camino_libre.
     def calcular_direccion(self, start, end):
@@ -283,8 +286,9 @@ class Tablero:
         return 1 if end > start else -1
 
     # Parte 3 del método verificar_camino_libre.
-    def verificar_casillas_libres(self, x_start, y_start, x_end, y_end, dx, dy):
+    def verificar_casillas_libres(self, parametros):
         # Verifica si todas las casillas en el camino están libres.
+        x_start, y_start, x_end, y_end, dx, dy = parametros
         x_avance, y_avance = x_start + dx, y_start + dy
 
         while x_avance != x_end or y_avance != y_end:
@@ -293,7 +297,7 @@ class Tablero:
             x_avance += dx
             y_avance += dy
 
-        return True                      
+        return True             
 
     # Este es el método que se llama para mover una pieza.
     def mover_pieza(self, pieza, nueva_posicion_str, \
