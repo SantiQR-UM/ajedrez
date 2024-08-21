@@ -1,4 +1,4 @@
-## :bar_chart:  Testeos
+## :bar_chart:  Tests
 
 ### Circle CI
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/SantiQR-UM/chess/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/SantiQR-UM/chess/tree/main)
