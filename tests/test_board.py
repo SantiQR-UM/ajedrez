@@ -284,7 +284,7 @@ class TestBoard(unittest.TestCase):
             if piece.color == 'black':
                 piece.possible_movements = MagicMock(return_value=[])
 
-        result = self.__board__.check_victory()
+        result = Rules.check_victory(self.__board__)
         self.assertEqual(result, "Draw by movements!")
 
 
@@ -297,7 +297,7 @@ class TestBoard(unittest.TestCase):
             if piece.color == 'black':
                 piece.possible_movements = MagicMock(return_value=[(3, 3)])
 
-        result = self.__board__.check_victory()
+        result = Rules.check_victory(self.__board__)
         self.assertEqual(result, "The player black has won by movements!")
 
 
@@ -310,7 +310,7 @@ class TestBoard(unittest.TestCase):
             if piece.color == 'white':
                 piece.possible_movements = MagicMock(return_value=[(2, 2)])
 
-        result = self.__board__.check_victory()
+        result = Rules.check_victory(self.__board__)
         self.assertEqual(result, "The player white has won by movements!")
 
 
@@ -321,7 +321,7 @@ class TestBoard(unittest.TestCase):
             if piece.color == 'white':
                 piece.__lives__ = False
 
-        result = self.__board__.check_victory()
+        result = Rules.check_victory(self.__board__)
         self.assertEqual(result, "The player black has won by capturing the white king!")
 
 
@@ -332,7 +332,7 @@ class TestBoard(unittest.TestCase):
             if piece.color == 'black':
                 piece.__lives__ = False
 
-        result = self.__board__.check_victory()
+        result = Rules.check_victory(self.__board__)
         self.assertEqual(result, "The white player has won by capturing the black king!")
 
 
@@ -348,7 +348,7 @@ class TestBoard(unittest.TestCase):
             if piece.color == 'white':
                 piece.possible_movements = MagicMock(return_value=[(2, 2)])
 
-        result = self.__board__.check_victory()
+        result = Rules.check_victory(self.__board__)
         self.assertEqual(result, "")
 
 

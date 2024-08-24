@@ -65,6 +65,6 @@ class Chess:
 
     # This function is responsible for verifying if the game is over.
     def check_end(self):
-        return self.__board__.check_victory()
+        return Rules.check_victory(self.__board__)
 
             

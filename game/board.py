@@ -374,13 +374,16 @@ class Board:
 
         return move_string # I return the string with the movement made.
 
+
+class Rules:
     # This is the main method to check if the game has ended.
+    @staticmethod
     def check_victory(self):
         # I check if the game has ended.
 
         # If its a victory by pieces, 
         # I check if the king of each player is alive.
-        end_string, white_pieces_alive, black_pieces_alive = self.victory_by_pieces()
+        end_string, white_pieces_alive, black_pieces_alive = Rules.victory_by_pieces(self)
 
         if end_string != "":
             return end_string
@@ -402,6 +405,7 @@ class Board:
         return end_string # I return the string with the end of the game.
     
     # Submethod of check_victory
+    @staticmethod
     def victory_by_pieces(self):
         # I check if the king of each player is alive.
         white_king_alive = any(piece.name == "King" and piece.color == 'white' 
