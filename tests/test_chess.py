@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 from game.board import *
 from game.chess import *
 import sys
@@ -9,6 +9,7 @@ class TestChess(unittest.TestCase):
 
     def setUp(self):
         self.chess = Chess()
+        self.__board__ = Board()
 
     # I test that the turn can be changed.
     def test_change_turn(self):
@@ -68,6 +69,86 @@ class TestChess(unittest.TestCase):
     def test_check_end(self):
         self.chess.__board__ = Board()
         self.assertFalse(self.chess.check_end())
+    
+    # I test that victory can be verified, for different cases.
+    # I use assertEqual to check that the returned string is the expected one.
+
+    @patch('builtins.print')
+    def test_victory_movements_draw(self, mock_print):
+        # All the pieces remain without possible movements.
+        for piece in self.__board__.__DB_pieces__.__data_base__.values():
+            if piece.color == 'white':
+                piece.possible_movements = MagicMock(return_value=[])
+            if piece.color == 'black':
+                piece.possible_movements = MagicMock(return_value=[])
+
+        result = Rules.check_victory(self.__board__)
+        self.assertEqual(result, "Draw by movements!")
+
+
+    @patch('builtins.print')
+    def test_victory_movements_black_win(self, mock_print):
+        # All the pieces are white and have possible movements.
+        for piece in self.__board__.__DB_pieces__.__data_base__.values():
+            if piece.color == 'white':
+                piece.possible_movements = MagicMock(return_value=[])
+            if piece.color == 'black':
+                piece.possible_movements = MagicMock(return_value=[(3, 3)])
+
+        result = Rules.check_victory(self.__board__)
+        self.assertEqual(result, "The player black has won by movements!")
+
+
+    @patch('builtins.print')
+    def test_victory_movements_white_win(self, mock_print):
+        # All the pieces are black and have possible movements.
+        for piece in self.__board__.__DB_pieces__.__data_base__.values():
+            if piece.color == 'black':
+                piece.possible_movements = MagicMock(return_value=[])
+            if piece.color == 'white':
+                piece.possible_movements = MagicMock(return_value=[(2, 2)])
+
+        result = Rules.check_victory(self.__board__)
+        self.assertEqual(result, "The player white has won by movements!")
+
+
+    @patch('builtins.print')
+    def test_victory_pieces_black_win(self, mock_print):
+        # The white king is eaten.
+        for piece in self.__board__.__DB_pieces__.__data_base__.values():
+            if piece.color == 'white':
+                piece.__lives__ = False
+
+        result = Rules.check_victory(self.__board__)
+        self.assertEqual(result, "The player black has won by capturing the white king!")
+
+
+    @patch('builtins.print')
+    def test_victory_pieces_white_win(self, mock_print):
+        # The black king is eaten.
+        for piece in self.__board__.__DB_pieces__.__data_base__.values():
+            if piece.color == 'black':
+                piece.__lives__ = False
+
+        result = Rules.check_victory(self.__board__)
+        self.assertEqual(result, "The white player has won by capturing the black king!")
+
+
+    @patch('builtins.print')
+    def test_check_victory_none(self, mock_print):
+        # I set that all the pieces are alive and have possible movements.
+        for piece in self.__board__.__DB_pieces__.__data_base__.values():
+            piece.__lives__ = True
+        
+        for piece in self.__board__.__DB_pieces__.__data_base__.values():
+            if piece.color == 'black':
+                piece.possible_movements = MagicMock(return_value=[(3 ,3)])
+            if piece.color == 'white':
+                piece.possible_movements = MagicMock(return_value=[(2, 2)])
+
+        result = Rules.check_victory(self.__board__)
+        self.assertEqual(result, "")
+
 
 
 if __name__ == '__main__':
