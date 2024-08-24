@@ -6,7 +6,4 @@ class Bishop(Piece):
 
     # To return the symbol of the box.
     def __str__(self):
-        if self.__color__ == "white":
-            return u"\u2657"
-        else:
-            return u"\u265D"
+        return "♗" if self.__color__ == "white" else "♝"

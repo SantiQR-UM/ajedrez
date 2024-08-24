@@ -6,7 +6,4 @@ class Rook(Piece):
 
     # To return the symbol of the box.
     def __str__(self):
-        if self.__color__ == "white":
-            return u"\u2656"
-        else:
-            return u"\u265C"
+        return "♖" if self.__color__ == "white" else "♜"

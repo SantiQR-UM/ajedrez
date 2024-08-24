@@ -12,10 +12,7 @@ class Pawn(Piece):
     
     # To return the symbol of the box.
     def __str__(self):
-        if self.__color__ == "white":
-            return u"\u2659"
-        else:
-            return u"\u265F"
+        return "♙" if self.__color__ == "white" else "♟"
 
 
     def possible_movements(self):
