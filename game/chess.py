@@ -102,11 +102,8 @@ class Rules:
     @staticmethod
     def victory_by_pieces(self):
         # I check if the king of each player is alive.
-        white_king_alive = any(piece.name == "King" and piece.color == 'white' 
-                    and piece.lives for piece in self.__DB_pieces__.data_base.values())
-        
-        black_king_alive = any(piece.name == "King" and piece.color == 'black'
-                    and piece.lives for piece in self.__DB_pieces__.data_base.values())
+        white_king_alive = Rules.king_alive(self, 'white') 
+        black_king_alive = Rules.king_alive(self, 'black') 
 
         # I create the empty string.
         end_string = ""
@@ -118,10 +115,19 @@ class Rules:
             end_string += "The white player has won by capturing the black king!"
         
         # I check each of the living pieces of each player
-        white_pieces_alive = [piece for piece in self.__DB_pieces__.data_base.values() if \
-                                piece.color == 'white' and piece.lives]
-        black_pieces_alive = [piece for piece in self.__DB_pieces__.data_base.values() if \
-                                piece.color == 'black' and piece.lives]
+        white_pieces_alive = Rules.pieces_alive(self, 'white')
+        black_pieces_alive = Rules.pieces_alive(self, 'black')
 
         # I return the victory message and the living pieces of each player.
         return end_string, white_pieces_alive, black_pieces_alive
+    
+    @staticmethod
+    def king_alive(self, color):
+        return True if any(piece.name == "King" and piece.color == color \
+                    and piece.lives for piece in self.__DB_pieces__.data_base.values())\
+        else False
+    
+    @staticmethod
+    def pieces_alive(self, color):
+        return [piece for piece in self.__DB_pieces__.data_base.values() if \
+                                piece.color == color and piece.lives]
