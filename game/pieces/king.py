@@ -1,9 +1,7 @@
 from game.pieces.pieces import Piece
 
 class King(Piece):
-    def __init__(self, id, color, position, name):
-        super().__init__(id, color, position, name)
 
-    # To return the symbol of the box.
+    # To return the king symbol.
     def __str__(self):
         return "♔" if self.__color__ == "white" else "♚"
