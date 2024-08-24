@@ -12,18 +12,18 @@ class TestChess(unittest.TestCase):
 
     # I test that the turn can be changed.
     def test_change_turn(self):
-        self.assertEqual(self.chess.__turn__, "white")
+        self.assertEqual(self.chess.turn, "white")
         self.chess.change_turn()
-        self.assertEqual(self.chess.__turn__, "black")
+        self.assertEqual(self.chess.turn, "black")
         self.chess.change_turn()
-        self.assertEqual(self.chess.__turn__, "white")
+        self.assertEqual(self.chess.turn, "white")
 
     # I test that the lists are filled.
     def test_play(self):
         self.chess.play()
-        self.assertIsNotNone(self.chess.__pieces_list__)
-        self.assertIsNotNone(self.chess.__instances_list__)
-        self.assertIsNotNone(self.chess.__possibilities_list__)
+        self.assertIsNotNone(self.chess.pieces_list)
+        self.assertIsNotNone(self.chess.instances_list)
+        self.assertIsNotNone(self.chess.possibilities_list)
 
     # I test that the chess board can be printed.
     def test_imprimir_tablero_ajedrez(self):
@@ -49,9 +49,9 @@ class TestChess(unittest.TestCase):
     # I test that the data is passed well and that a piece can be moved.
     def test_move_chess(self):
         selection = MagicMock()
-        selection.__name__ = "Pawn"
-        selection.__color__ = "black"
-        selection.__position__ = (2, 2)
+        selection.name = "Pawn"
+        selection.color = "black"
+        selection.position = (2, 2)
         new_position_str = "b5"
         new_position_int = (2, 4)
         old_position = ('b', '7')

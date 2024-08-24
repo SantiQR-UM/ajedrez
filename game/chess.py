@@ -10,6 +10,26 @@ class Chess:
         self.__instances_list__ = None
         self.__possibilities_list__ = None
 
+    @property
+    def board(self):
+        return self.__board__
+    
+    @property
+    def turn(self):
+        return self.__turn__
+    
+    @property
+    def pieces_list(self):
+        return self.__pieces_list__
+    
+    @property
+    def instances_list(self):
+        return self.__instances_list__
+    
+    @property
+    def possibilities_list(self):
+        return self.__possibilities_list__
+
     # There isnt much explanation needed for this, right?
     def change_turn(self):
         self.__turn__ = "black" if self.__turn__ == "white" else "white"

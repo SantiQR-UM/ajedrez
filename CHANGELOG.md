@@ -10,7 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Tests added to `test_interface` for 100% coverage.
 - Everything has been changed to english.
 
 ### Fixed
